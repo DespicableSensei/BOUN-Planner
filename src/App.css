@@ -1,0 +1,58 @@
+.box {
+  width: 78px;
+  padding: 20px;
+  display: block;
+  float: left;
+  background: #ccc;
+  border: 1px solid #000000;
+  margin-left:-1px;
+  margin-top:-1px;
+  user-select: none;
+}
+.grid {
+  width: 600px;
+  background: rgba(25, 171, 255, 0.8);
+}
+.app {
+  margin:0 auto;
+  background: yellow;
+}
+.buttons {
+  border: royalblue solid 2px;
+  margin: 2px;
+  width: 600px;
+}
+.buttons input {
+  height: 34px;
+  width: 200px;
+}
+.buttons table {
+  width: 100%
+}
+.buttons button {
+  background: rgb(75, 75, 75);
+  border: none;
+  width: 40px;
+  height: 40px;
+  display: table-cell;
+  color: white;
+  font-size: 18px;
+}
+.button {
+  width: 40px;
+}
+.hide {
+  color: #ccc;
+}
+ul li {
+user-select: none;
+}
+.courseSearch {
+  background: #ccc;
+}
+.courseScroll {
+  background: #ccc;
+}
+.courseScroll table {
+  width: 100%;
+}
