@@ -1,5 +1,5 @@
 .box {
-  width: 19%;
+  width: calc(20% - 5px);
   height: 5%;
   padding: 5px;
   background: #ccc;
@@ -7,7 +7,7 @@
   margin-left:-1px;
   margin-top:-1px;
   user-select: none;
-  display: table-cell;
+  display: inline-block;
 }
 .box p {
   margin: 0;
@@ -51,6 +51,11 @@
 }
 ul li {
 user-select: none;
+}
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 .courseSearch {
   background: #ccc;

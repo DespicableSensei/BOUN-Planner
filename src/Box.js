@@ -24,7 +24,6 @@ class Box extends React.Component {
         this.props.increaseCell(e.target.id, "MOUSE");
     }
     render() {
-        console.log(this.mapArray());
         return(
             <div className='grid'>
                 <div className='box' key={Math.random()}>Pazartesi</div>

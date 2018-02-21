@@ -5,20 +5,26 @@ import data from './deps.json';
 import all from './amk.min.json';
 
 import Table from './Table';
+import ActualTable from './ActualTable';
 import Buttons from './Buttons';
 import CourseSearch from './CourseSearch';
-
-var array = new Array(60);
-array = array.fill([0]);
 
 class App extends Component {
   constructor() {
     super();
+    var array = new Array(84);
+    array = array.fill([0]);
     this.state = {
       array:array,
     };
     console.log(all);
     console.log(array);
+  }
+  updateState = () => {
+   console.log('changing state');
+    this.setState({
+      x: 2
+    },() => { console.log('new state', this.state); })
   }
   increaseByOne() {
     var cur = this.state.array;
@@ -35,24 +41,15 @@ class App extends Component {
     this.setState({array:newcur});
   }
   increaseSpecificCell(index, courseCode) {
-    console.log("ISC");
+    console.log("ISC",index);
     if(index>this.state.array.length) {alert('O kadar ders yok olm')}
     else {
     var cur = JSON.parse(JSON.stringify(this.state.array));
-    let curToPush = cur[index];
-    console.log("KURUNDEX");
     console.log(cur[index]);
-    if(curToPush[0] === 0) {curToPush.pop();}
-    curToPush.push("hahaha");
+    cur[index].push(courseCode);
+    console.log(cur);
     this.setState({array:cur});
-    }
-  }
-  increaseSpecificCellConflicted(index, courseCode) {
-    if(index>this.state.array.length) {alert('O kadar ders yok olm')}
-    else {
-    var cur = this.state.array;
-    cur[index] = cur[index] + courseCode;
-    this.setState({array:cur});
+    console.log(this.state.array);
     }
   }
   checkForConflict(target, course) {
@@ -72,7 +69,7 @@ class App extends Component {
     var convertedArray = timesOfChange.map((initial) => {
       var col = initial.charAt(0);
       var row = initial.slice(1);
-      return ((row*5)+(col-1)-4);
+      return ((row*6)+(col-1)-5);
     })
     console.log(convertedArray);
     convertedArray.forEach((index) => {
@@ -90,14 +87,13 @@ class App extends Component {
   render() {
     return (
       <div>
-      <center>
       <CourseSearch addCourse={this.getValue.bind(this)} data={data} all={all} />
       <Buttons funcOne={this.increaseByOne.bind(this)} funcTwo={this.decreaseByOne.bind(this)} takeInput={this.getValue.bind(this)}/>
       <div  className="app">
-        <Table array={this.state.array} increaseCell={this.increaseSpecificCell.bind(this)}/>
+      <ActualTable array={this.state.array}/>
+        {/* <Table array={this.state.array} increaseCell={this.increaseSpecificCell.bind(this)}/> */}
       </div>
       {this.state.array.join()}
-      </center>
       </div>
     );
   }
