@@ -5,30 +5,27 @@ class ResultCourse extends React.Component {
         super();
         this.state = {
             height: 0
-        }
+        };
     }
-    componentWillMount() {
-        this.setState({height: 400});
-    }
-    addCourse(timeString, courseCode) {
-        this.props.addCourse(timeString,courseCode);
+    addCourse(days, hours, courseCode) {
+        this.props.addCourse(days, hours, courseCode);
     }
     listResults() {
         let height = 0;
         let matchedDeps = this.props.results;
         let allCourses = this.props.all;
-        var depArray = allCourses[matchedDeps];
+        var depArray = this.props.results;
         if(matchedDeps.length !== 0) {
             var displayArray = depArray.map((course) => {
                 return (
                     <tr>
-                    <td>{course.code}</td>
-                    <td>{course.name}</td>
-                    <td>{course.credits}</td>
-                    <td>{course.ects}</td>
-                    <td>{course.instructor}</td>
-                    <td>{course.time}</td>
-                    <td><button onClick={this.addCourse.bind(this,course.time,course.code)}>Add</button></td>
+                    <td>{course["Code_Sec"]}</td>
+                    <td>{course["Name"]}</td>
+                    <td>{course["Credits"]}</td>
+                    <td>{course["Ects"]}</td>
+                    <td>{course["Instr."]}</td>
+                    <td>{course["Timestring"]}</td>
+                    <td><button onClick={this.addCourse.bind(this,course["Days"],course["Hours"],course["Code_Sec"])}>Add</button></td>
                     </tr>
                 );
             })
@@ -37,7 +34,9 @@ class ResultCourse extends React.Component {
         else {
             return (
                 <tr>
-                <td>Type</td>
+                <center>
+                <td>Start by typing in your course code.</td>
+                </center>
                 </tr>
             );
         }
@@ -47,7 +46,7 @@ class ResultCourse extends React.Component {
             var sty = {height: 400, overflowY:'scroll', overflowX:'hidden'}
         }
         else {
-            var sty = {display: 'none'}
+            var sty = {marginLeft: "auto",marginRight: "auto"}
         }
         return (
             <div className='courseScroll' style={sty}>

@@ -15,10 +15,10 @@ class CourseSearch extends React.Component {
         var change = e.target.value.toUpperCase();
         console.log(change);
         //let deps = this.props.data;
-        let deps = Object.keys(this.props.all);
+        let deps = this.props.all;
         var matchedDeps = [];
         deps.forEach((dep) => {
-            if (dep.startsWith(change) && change !== '') {
+            if (dep["Code_Sec"].startsWith(change) && change !== '') {
                 matchedDeps.push(dep);
             }
         });
