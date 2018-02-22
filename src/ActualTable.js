@@ -13,7 +13,7 @@ class ActualTable extends React.Component {
         for(var i = timeIndex*6; i<timeIndex*6+6; i++) {
             rowReturn.push(this.props.array[i]);
         }
-        return rowReturn;
+        return [rowReturn, timeIndex];
     }
     returnAllRows() {
         var currentAllRows = [];
@@ -29,17 +29,20 @@ class ActualTable extends React.Component {
         }
         return currentAllCols;
     }
-    makeRow(rowArray) {
+    makeRow(makeRowArray) {
+        //makeRowArray: [rowReturn, timeIndex]
+        var rowArray = makeRowArray[0];
+        var timeIndex = makeRowArray[1];
         var cellArray = rowArray.map((cell) => {
             return this.makeCell(cell);
         })
-        return <tr>{cellArray}</tr>;
+        return <tr key={Math.random()}><td>{this.giveActualTime(timeIndex)}</td>{cellArray}</tr>;
     }
     makeCell(cellArray) {
         var insideCellArray = cellArray.map((item) => {
-            return <li>{item}</li>
+            return <li key={Math.random()}>{item}</li>
         })
-        return <td>{insideCellArray}</td>
+        return <td key={Math.random()}>{insideCellArray}</td>
     }
     makeAllRows() {
         var rowArray = [];
@@ -48,16 +51,23 @@ class ActualTable extends React.Component {
         }
         return rowArray;
     }
+    giveActualTime(timeIndex) {
+        var startTimeIndex = timeIndex+9;
+        var endTimeIndex = timeIndex+10;
+        var finalTimeString = startTimeIndex + ":00 - " + endTimeIndex + ":00";
+        return finalTimeString;
+    }
     render() {
         console.log(this.returnAllRows());
         return(
-            <table border='2'>
+            <table id="coursesTable">
                 <thead>
                     <tr>
+                        <th>Saat</th>
                         <th>Pazartesi</th>
-                        <th>Sali</th>
-                        <th>Carsamba</th>
-                        <th>Persembe</th>
+                        <th>Salı</th>
+                        <th>Çarşamba</th>
+                        <th>Perşembe</th>
                         <th>Cuma</th>
                         <th>Cumartesi</th>
                     </tr>

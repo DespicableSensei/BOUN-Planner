@@ -11,14 +11,11 @@ class ResultCourse extends React.Component {
         this.props.addCourse(days, hours, courseCode);
     }
     listResults() {
-        let height = 0;
         let matchedDeps = this.props.results;
-        let allCourses = this.props.all;
-        var depArray = this.props.results;
         if(matchedDeps.length !== 0) {
-            var displayArray = depArray.map((course) => {
+            var displayArray = matchedDeps.map((course) => {
                 return (
-                    <tr>
+                    <tr key={Math.random()}>
                     <td>{course["Code_Sec"]}</td>
                     <td>{course["Name"]}</td>
                     <td>{course["Credits"]}</td>
@@ -34,19 +31,18 @@ class ResultCourse extends React.Component {
         else {
             return (
                 <tr>
-                <center>
                 <td>Start by typing in your course code.</td>
-                </center>
                 </tr>
             );
         }
     }
     render() {
+        var sty = {};
         if (this.props.results.length !== 0) {
-            var sty = {height: 400, overflowY:'scroll', overflowX:'hidden'}
+            sty = {height: 400, overflowY:'scroll', overflowX:'hidden'}
         }
         else {
-            var sty = {marginLeft: "auto",marginRight: "auto"}
+            sty = {marginLeft: "auto",marginRight: "auto"}
         }
         return (
             <div className='courseScroll' style={sty}>

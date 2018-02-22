@@ -31,9 +31,12 @@ class CourseSearch extends React.Component {
     render() {
         return (
             <div className='courseSearch'>
-                <div>
-                    <input onChange={this.handleChange.bind(this)}></input>
+                <center>
+                <div className="inputClass">
+                    <input placeholder="Course Code" onChange={this.handleChange.bind(this)}></input>
                 </div>
+                
+                </center>
                 <div>
                     <ResultCourse addCourse={this.props.addCourse} data={this.props.data} all={this.props.all} results={this.state.matchedSearch}/>
                 </div>
