@@ -13,8 +13,6 @@ class CourseSearch extends React.Component {
     }
     handleChange(e) {
         var change = e.target.value.toUpperCase();
-        console.log(change);
-        //let deps = this.props.data;
         let deps = this.props.all;
         var matchedDeps = [];
         deps.forEach((dep) => {
@@ -22,7 +20,6 @@ class CourseSearch extends React.Component {
                 matchedDeps.push(dep);
             }
         });
-        console.log(matchedDeps);
         this.setState({
             currentSearch: change,
             matchedSearch: matchedDeps
@@ -38,7 +35,7 @@ class CourseSearch extends React.Component {
                 
                 </center>
                 <div>
-                    <ResultCourse addCourse={this.props.addCourse} data={this.props.data} all={this.props.all} results={this.state.matchedSearch}/>
+                    <ResultCourse getIndex={this.props.getIndex} courseIndexes={this.props.courseIndexes} checkForConflicts={this.props.checkForConflicts} addCourse={this.props.addCourse} data={this.props.data} all={this.props.all} results={this.state.matchedSearch}/>
                 </div>
             </div>
         );

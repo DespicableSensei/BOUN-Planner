@@ -1,14 +1,17 @@
 import React from 'react';
 
 class ResultCourse extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            height: 0
-        };
-    }
     addCourse(days, hours, courseCode) {
         this.props.addCourse(days, hours, courseCode);
+    }
+    doesThisConflict(days, hours) {
+        var arrayOfThisCourse = this.props.getIndex(days, hours);
+        console.log(arrayOfThisCourse);
+        var arrayOfCourseIndexes = this.props.courseIndexes;
+        var resultOfCheck = arrayOfThisCourse.map((index) => {
+            return arrayOfCourseIndexes.indexOf(index);
+        });
+        return resultOfCheck;
     }
     listResults() {
         let matchedDeps = this.props.results;
@@ -22,6 +25,7 @@ class ResultCourse extends React.Component {
                     <td>{course["Ects"]}</td>
                     <td>{course["Instr."]}</td>
                     <td>{course["Timestring"]}</td>
+                    <td>Conflicts: {this.doesThisConflict(course["Days"],course["Hours"])}</td>
                     <td><button onClick={this.addCourse.bind(this,course["Days"],course["Hours"],course["Code_Sec"])}>Add</button></td>
                     </tr>
                 );

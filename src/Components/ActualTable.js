@@ -34,11 +34,11 @@ class ActualTable extends React.Component {
         var rowArray = makeRowArray[0];
         var timeIndex = makeRowArray[1];
         var cellArray = rowArray.map((cell) => {
-            return this.makeCell(cell);
+            return this.makeCell(cell,timeIndex);
         })
         return <tr key={Math.random()}><td>{this.giveActualTime(timeIndex)}</td>{cellArray}</tr>;
     }
-    makeCell(cellArray) {
+    makeCell(cellArray,timeIndex) {
         var insideCellArray = cellArray.map((item) => {
             return <li key={Math.random()}>{item}</li>
         })
@@ -58,7 +58,6 @@ class ActualTable extends React.Component {
         return finalTimeString;
     }
     render() {
-        console.log(this.returnAllRows());
         return(
             <table id="coursesTable">
                 <thead>
