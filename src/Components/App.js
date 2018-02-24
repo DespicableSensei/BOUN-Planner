@@ -104,7 +104,6 @@ class App extends Component {
   getIndex(days, times, courseCode) {
     var timesOfChange = convertTime(days, times);
     var convertedArray = timesOfChange.map((initial) => {
-      console.log(initial);
       var col = initial.charAt(0);
       var row = initial.slice(1);
       return ((row*6)+(col-1)-5);
@@ -227,9 +226,35 @@ function convertTime(days, times) {
     }
   }
   //EXAMPLE MWF91011
-  
-
-
+  else {
+    slicedTimes.map((item, index) => {
+      switch(item) {
+      default:
+          console.log('');
+      break
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+          timeArray.push(item);
+      break
+      case '1':
+          var next = slicedTimes[index+1];
+          if(next===undefined) {
+              //timeArray.pop();
+          }
+          else if(next==='0' || next==='1' || next==='2' || next==='3' || next==='4') {
+              var push = item + next;
+              timeArray.push(push);
+          }
+      break
+      }
+    });
+  }
     colArray.map((day,index) => {
     finalArray.push(day+timeArray[index]);
     return "OK";

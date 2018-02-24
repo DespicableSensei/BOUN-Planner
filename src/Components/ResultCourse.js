@@ -6,11 +6,25 @@ class ResultCourse extends React.Component {
     }
     doesThisConflict(days, hours) {
         var arrayOfThisCourse = this.props.getIndex(days, hours);
-        console.log(arrayOfThisCourse);
         var arrayOfCourseIndexes = this.props.courseIndexes;
-        var resultOfCheck = arrayOfThisCourse.map((index) => {
-            return arrayOfCourseIndexes.indexOf(index);
-        });
+        // var resultOfCheck = arrayOfThisCourse.map((index) => {
+        //     return arrayOfCourseIndexes.indexOf(index);
+        // });
+        if(arrayOfThisCourse.length !== 0) {
+            console.log(days,hours,arrayOfThisCourse,arrayOfCourseIndexes);
+            //var resultOfCheck = arrayOfThisCourse.reduce((acc, cur) => acc+cur)
+            var resultOfCheck = arrayOfThisCourse.reduce((acc, cur) => {
+                var currentConflict = (arrayOfCourseIndexes.indexOf(cur) > -1)?1:0;
+                return acc + currentConflict;
+            },0);
+        }
+        if(arrayOfThisCourse.length === 0) {
+            resultOfCheck = 0;
+        }
+        // var resultOfCheck = arrayOfThisCourse.reduce(index => {
+        //     return arrayOfCourseIndexes.indexOf(index);
+        // });
+        console.log(resultOfCheck);
         return resultOfCheck;
     }
     listResults() {
