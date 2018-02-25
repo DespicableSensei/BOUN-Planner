@@ -6,6 +6,8 @@ import all from '../amk.min.json';
 import ActualTable from './ActualTable';
 import CourseSearch from './CourseSearch';
 import AddedCourses from "./AddedCourses";
+import { MuiThemeProvider } from 'material-ui/styles';
+import { Snackbar, Drawer } from 'material-ui';
 
 class App extends Component {
   constructor() {
@@ -20,6 +22,9 @@ class App extends Component {
       myCourses:myCourses,
       myCoursesIndexes:myCoursesIndexes,
       conflicts:conflicts,
+      openNotification: false,
+      notificationMessage: "",
+      openDrawer: true,
     };
   }
   addToCourseList(indexArray, courseCode) {
@@ -32,7 +37,8 @@ class App extends Component {
       this.addToCells(indexArray,courseCode);
     }
     else {
-      alert("This course has already been added: " + courseCode);
+      console.log("This course has already been added: " + courseCode);
+      this.handleNotification(1, 0, courseCode);
       return
     }
 
@@ -41,7 +47,8 @@ class App extends Component {
         currentCoursesIndexes.push(index);
       }
       else {
-        alert("There is a conflict at this index: " + index);
+        this.handleNotification(0, index, courseCode);
+        console.log("There is a conflict at this index: " + index);
       }
     })
 
@@ -51,10 +58,27 @@ class App extends Component {
       conflicts:currentConflicts,
     })
   }
+  handleNotification(type, index, courseCode) {
+    console.log("handled");
+    var cur = JSON.parse(JSON.stringify(this.state.array));
+    switch(type) {
+      case 0:
+        var message = "There is a conflict between " + courseCode + " and " + cur[index].slice(1).join(", ");
+      break
+      case 1:
+        var message = "This course has already been added: " + courseCode;
+      break
+    }
+    this.setState({
+      notificationMessage: message,
+      openNotification: true,
+    });
+  }
   removeFromCourseList(indexArray, courseCode) {
     var currentCourses = JSON.parse(JSON.stringify(this.state.myCourses));
     var currentCoursesIndexes = JSON.parse(JSON.stringify(this.state.myCoursesIndexes));
     var currentConflicts = this.checkForConflicts();
+    
 
     if (currentCourses.indexOf(courseCode) < 0) {
       alert("There is no such course added?!");
@@ -141,17 +165,26 @@ class App extends Component {
     })
     return conflictArray;
   }
+  handleRequestClose = () => {
+    this.setState({
+      openNotification: false,
+    });
+  };
   render() {
     return (
+      <MuiThemeProvider>
       <div>
+      <Drawer docked={true} openSecondary={true} width={700} open={this.state.openDrawer}>
       <CourseSearch getIndex={this.getIndex.bind(this)} courseIndexes={this.state.myCoursesIndexes} checkForConflicts={this.checkForConflicts.bind(this)} addCourse={this.addCourse.bind(this)} all={all} />
       <br/>
       <AddedCourses removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses}/>
-      <br/>
+      </Drawer>
         <div  className="table">
         <ActualTable array={this.state.array}/>
         </div>
+        <Snackbar open={this.state.openNotification} message={this.state.notificationMessage} autoHideDuration={4000} onRequestClose={this.handleRequestClose} />
       </div>
+      </MuiThemeProvider>
     );
   }
 }
