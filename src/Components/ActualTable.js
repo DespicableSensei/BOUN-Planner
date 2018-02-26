@@ -53,8 +53,9 @@ class ActualTable extends React.Component {
     }
     giveActualTime(timeIndex) {
         var startTimeIndex = timeIndex+9;
-        var endTimeIndex = timeIndex+10;
-        var finalTimeString = startTimeIndex + ":00 - " + endTimeIndex + ":00";
+        //var endTimeIndex = timeIndex+10;
+        //var finalTimeString = startTimeIndex + ":00 - " + endTimeIndex + ":00";
+        var finalTimeString = startTimeIndex + ":00";
         return finalTimeString;
     }
     render() {

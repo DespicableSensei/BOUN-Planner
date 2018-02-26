@@ -7,16 +7,25 @@ import ActualTable from './ActualTable';
 import CourseSearch from './CourseSearch';
 import AddedCourses from "./AddedCourses";
 import { MuiThemeProvider } from 'material-ui/styles';
-import { Snackbar, Drawer } from 'material-ui';
+import { Snackbar, Drawer, AppBar, IconButton } from 'material-ui';
+import ActionList from "material-ui/svg-icons/action/list";
+import BounLogo from "../Static/logo.png";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import { lightBlueA400 } from "material-ui/styles/colors";
+
 
 class App extends Component {
   constructor() {
     super();
+
     var array = new Array(84);
     array = array.fill([""]);
+
     var myCourses = [];
     var myCoursesIndexes = [];
     var conflicts = [];
+
     this.state = {
       array:array,
       myCourses:myCourses,
@@ -170,20 +179,53 @@ class App extends Component {
       openNotification: false,
     });
   };
+  // render() {
+  //   return (
+  //     <MuiThemeProvider>
+  //     <div>
+  //     <Drawer docked={true} openSecondary={true} width={700} open={this.state.openDrawer}>
+  //     <CourseSearch getIndex={this.getIndex.bind(this)} courseIndexes={this.state.myCoursesIndexes} checkForConflicts={this.checkForConflicts.bind(this)} addCourse={this.addCourse.bind(this)} all={all} />
+  //     <br/>
+  //     <AddedCourses removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses}/>
+  //     </Drawer>
+  //       <div  className="table">
+  //       <ActualTable array={this.state.array}/>
+  //       </div>
+  //       <Snackbar open={this.state.openNotification} message={this.state.notificationMessage} autoHideDuration={4000} onRequestClose={this.handleRequestClose} />
+  //     </div>
+  //     </MuiThemeProvider>
+  //   );
+  // }
+  
   render() {
-    return (
-      <MuiThemeProvider>
-      <div>
-      <Drawer docked={true} openSecondary={true} width={700} open={this.state.openDrawer}>
-      <CourseSearch getIndex={this.getIndex.bind(this)} courseIndexes={this.state.myCoursesIndexes} checkForConflicts={this.checkForConflicts.bind(this)} addCourse={this.addCourse.bind(this)} all={all} />
-      <br/>
-      <AddedCourses removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses}/>
-      </Drawer>
-        <div  className="table">
-        <ActualTable array={this.state.array}/>
+    let titleStyle = {
+      textAlign: "center",
+      textShadow: "1px 1px rgba(100, 100, 100, 0.26)",
+      fontSize: 28
+    };
+    const muiTheme = getMuiTheme({
+      palette: {
+        primary1Color: lightBlueA400,
+      }
+    });
+    return(
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <AppBar
+          title={"BOUN Course Planner +"}
+          showMenuIconButton={false}
+          iconElementRight={<IconButton><ActionList /></IconButton>}
+          iconElementLeft={<BounLogo/>}
+          titleStyle={titleStyle}
+        />
+        <div className={"mainContent"}>
+        <ActualTable array={this.state.array} />
         </div>
-        <Snackbar open={this.state.openNotification} message={this.state.notificationMessage} autoHideDuration={4000} onRequestClose={this.handleRequestClose} />
-      </div>
+        <Snackbar 
+          open={this.state.openNotification} 
+          message={this.state.notificationMessage} 
+          autoHideDuration={4000} 
+          onRequestClose={this.handleRequestClose} 
+        />
       </MuiThemeProvider>
     );
   }
