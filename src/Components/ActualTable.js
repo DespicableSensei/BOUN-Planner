@@ -36,7 +36,7 @@ class ActualTable extends React.Component {
         var cellArray = rowArray.map((cell) => {
             return this.makeCell(cell,timeIndex);
         })
-        return <tr key={Math.random()}><td>{this.giveActualTime(timeIndex)}</td>{cellArray}</tr>;
+        return <tr key={Math.random()}><td className={'timeIndex'}>{this.giveActualTime(timeIndex)}</td>{cellArray}</tr>;
     }
     makeCell(cellArray,timeIndex) {
         var insideCellArray = cellArray.map((item) => {
@@ -59,7 +59,9 @@ class ActualTable extends React.Component {
         return finalTimeString;
     }
     render() {
+        var tableDivClass = (this.props.drawer)?'tableDivOpenDrawer':'tableDiv';
         return(
+            <div className={tableDivClass}>
             <table id="coursesTable">
                 <thead>
                     <tr>
@@ -76,6 +78,7 @@ class ActualTable extends React.Component {
                     {this.makeAllRows()}
                 </tbody>
             </table>
+            </div>
         );
     }
 }

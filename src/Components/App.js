@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import '../App.css';
-
-import all from '../amk.min.json';
-
-import ActualTable from './ActualTable';
-import CourseSearch from './CourseSearch';
-import AddedCourses from "./AddedCourses";
-import { MuiThemeProvider } from 'material-ui/styles';
-import { Snackbar, Drawer, AppBar, IconButton } from 'material-ui';
-import ActionList from "material-ui/svg-icons/action/list";
-import BounLogo from "../Static/logo.png";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import { lightBlueA400 } from "material-ui/styles/colors";
+import { MuiThemeProvider } from "material-ui/styles";
+import { Snackbar, AppBar, IconButton, TextField } from "material-ui";
+import ActionList from "material-ui/svg-icons/action/list";
+import HardwareArrowLeft from "material-ui/svg-icons/hardware/keyboard-arrow-left";
+import HardwareArrowRight from "material-ui/svg-icons/hardware/keyboard-arrow-right";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import FontIcon from 'material-ui/FontIcon';
+import React, { Component } from 'react';
 
+import ActualTable from "./ActualTable";
+import AddedCourses from "./AddedCourses";
+import CourseSearch from "./CourseSearch";
+import StyledDrawer from "./StyledDrawer";
+
+import '../App.css';
+import all from '../amk.min.json';
 
 class App extends Component {
   constructor() {
@@ -34,6 +35,7 @@ class App extends Component {
       openNotification: false,
       notificationMessage: "",
       openDrawer: true,
+      appBarDepth: 2,
     };
   }
   addToCourseList(indexArray, courseCode) {
@@ -70,12 +72,16 @@ class App extends Component {
   handleNotification(type, index, courseCode) {
     console.log("handled");
     var cur = JSON.parse(JSON.stringify(this.state.array));
+    var message = '';
     switch(type) {
+      default:
+        message = 'Something went wrong!';
+      break
       case 0:
-        var message = "There is a conflict between " + courseCode + " and " + cur[index].slice(1).join(", ");
+        message = "There is a conflict between " + courseCode + " and " + cur[index].slice(1).join(", ");
       break
       case 1:
-        var message = "This course has already been added: " + courseCode;
+        message = "This course has already been added: " + courseCode;
       break
     }
     this.setState({
@@ -179,6 +185,16 @@ class App extends Component {
       openNotification: false,
     });
   };
+  handleRequestCloseDrawer = () => {
+    this.setState({
+      openDrawer: !this.state.openDrawer,
+    });
+  };
+  popOver() {
+    this.setState({
+
+    })
+  }
   // render() {
   //   return (
   //     <MuiThemeProvider>
@@ -201,24 +217,40 @@ class App extends Component {
     let titleStyle = {
       textAlign: "center",
       textShadow: "1px 1px rgba(100, 100, 100, 0.26)",
-      fontSize: 28
+      fontSize: 32,
+      marginLeft: -240,
     };
     const muiTheme = getMuiTheme({
       palette: {
         primary1Color: lightBlueA400,
       }
     });
+    let biggerIcon = {padding: '0px!important'};
+    let icon = (this.state.openDrawer)?<FontIcon className={'material-icons ' + 'biggerIcon'}>keyboard_arrow_right</FontIcon>:<FontIcon className={'material-icons ' + 'biggerIcon'}>keyboard_arrow_left</FontIcon>;
+
+    window.addCourse = this.addCourse.bind(this);
+    window.myCourses = this.state.myCourses;
+    window.array = this.state.array;
     return(
       <MuiThemeProvider muiTheme={muiTheme}>
         <AppBar
+          id={'appbar'}
           title={"BOUN Course Planner +"}
-          showMenuIconButton={false}
-          iconElementRight={<IconButton><ActionList /></IconButton>}
-          iconElementLeft={<BounLogo/>}
+          //title={<TextField onFocus={this.popOver.bind(this)} hintText={'Course Code'} />}
+          showMenuIconButton={true}
+          iconElementRight={
+          // <TextField onFocus={this.popOver.bind(this)} hintText={'Course Code'} /> 
+          <IconButton onClick={this.handleRequestCloseDrawer.bind(this)} >{icon}</IconButton>
+          }
+          iconElementLeft={<TextField onFocus={this.popOver.bind(this)} hintText={'Course Code'} />}
           titleStyle={titleStyle}
+          zDepth={this.state.appBarDepth}
         />
         <div className={"mainContent"}>
-        <ActualTable array={this.state.array} />
+        <ActualTable drawer={this.state.openDrawer} array={this.state.array} />
+        <StyledDrawer open={this.state.openDrawer}>
+          <AddedCourses removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
+        </StyledDrawer>
         </div>
         <Snackbar 
           open={this.state.openNotification} 
@@ -328,6 +360,7 @@ function convertTime(days, times) {
           }
       break
       }
+      return 'OK';
     });
   }
     colArray.map((day,index) => {
