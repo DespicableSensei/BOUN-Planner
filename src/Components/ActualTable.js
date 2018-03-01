@@ -64,7 +64,6 @@ class ActualTable extends React.Component {
     }
     render() {
         var tableDivClass = (this.props.drawer)?'tableDivOpenDrawer':'tableDiv';
-        console.log(this);
         return(
             <div ref={ (divElement) => this.divElement = divElement} className={tableDivClass}>
             <table id="coursesTable">
