@@ -48,10 +48,10 @@ class ResultCourse extends React.Component {
     render() {
         var sty = {};
         if (this.props.results.length !== 0) {
-            sty = {height: 400, overflowY:'scroll', overflowX:'hidden'}
+            sty = {maxHeight:400, overflowY:'scroll', overflowX:'hidden'}
         }
         else {
-            sty = {marginLeft: "auto",marginRight: "auto"}
+            sty = {}
         }
         return (
             <div className='courseScroll' style={sty}>

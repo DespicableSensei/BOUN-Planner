@@ -58,10 +58,15 @@ class ActualTable extends React.Component {
         var finalTimeString = startTimeIndex + ":00";
         return finalTimeString;
     }
+    componentDidMount() {
+        const height = this.divElement.clientHeight;
+        this.props.setdiv(height);
+    }
     render() {
         var tableDivClass = (this.props.drawer)?'tableDivOpenDrawer':'tableDiv';
+        console.log(this);
         return(
-            <div className={tableDivClass}>
+            <div ref={ (divElement) => this.divElement = divElement} className={tableDivClass}>
             <table id="coursesTable">
                 <thead>
                     <tr>

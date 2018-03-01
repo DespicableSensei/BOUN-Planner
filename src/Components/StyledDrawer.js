@@ -16,7 +16,7 @@ class StyledDrawer extends React.Component {
             paddingTop: 20,
             top: 64+15,
             position: 'absolute',
-            height: '100%'
+            height: this.props.divHeight,
         }
         return (
             <Drawer containerStyle={containerStyle} zDepth={this.state.depth} docked={this.props.open} openSecondary={true} width={'20%'} open={this.props.open} >

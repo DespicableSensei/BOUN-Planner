@@ -42,6 +42,7 @@ class App extends Component {
       anchorEl: '',
       currentSearch: '',
       matchedSearch: '',
+      divHeight: '',
     };
   }
   addToCourseList(indexArray, courseCode) {
@@ -76,7 +77,6 @@ class App extends Component {
     })
   }
   handleNotification(type, index, courseCode) {
-    console.log("handled");
     var cur = JSON.parse(JSON.stringify(this.state.array));
     var message = '';
     switch(type) {
@@ -154,7 +154,6 @@ class App extends Component {
       return ((row*6)+(col-1)-5);
     })
     return convertedArray;
-    //this.addToCourseList(convertedArray,courseCode);
   }
   addCourse(days, times, courseCode) {
     var convertedArray = this.getIndex(days, times, courseCode);
@@ -208,24 +207,6 @@ class App extends Component {
       openPopover: false,
     });
   }
-
-  // render() {
-  //   return (
-  //     <MuiThemeProvider>
-  //     <div>
-  //     <Drawer docked={true} openSecondary={true} width={700} open={this.state.openDrawer}>
-  //     <CourseSearch getIndex={this.getIndex.bind(this)} courseIndexes={this.state.myCoursesIndexes} checkForConflicts={this.checkForConflicts.bind(this)} addCourse={this.addCourse.bind(this)} all={all} />
-  //     <br/>
-  //     <AddedCourses removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses}/>
-  //     </Drawer>
-  //       <div  className="table">
-  //       <ActualTable array={this.state.array}/>
-  //       </div>
-  //       <Snackbar open={this.state.openNotification} message={this.state.notificationMessage} autoHideDuration={4000} onRequestClose={this.handleRequestClose} />
-  //     </div>
-  //     </MuiThemeProvider>
-  //   );
-  // }
   handleSearch(e) {
     var change = e.target.value.toUpperCase();
         let deps = all;
@@ -239,6 +220,11 @@ class App extends Component {
             currentSearch: change,
             matchedSearch: matchedDeps
         });
+  }
+  setDivHeight(height) {
+    this.setState({
+      divHeight: height,
+    })
   }
   render() {
     let titleStyle = {
@@ -269,27 +255,20 @@ class App extends Component {
     let biggerIcon = {padding: '0px!important'};
     let icon = (this.state.openDrawer)?<FontIcon className={'material-icons ' + 'biggerIcon'}>keyboard_arrow_right</FontIcon>:<FontIcon className={'material-icons ' + 'biggerIcon'}>keyboard_arrow_left</FontIcon>;
 
-    window.addCourse = this.addCourse.bind(this);
-    window.myCourses = this.state.myCourses;
-    window.array = this.state.array;
     return(
       <MuiThemeProvider muiTheme={muiTheme}>
         <AppBar
           id={'appbar'}
           title={"BOUN Course Planner +"}
-          //title={<TextField onFocus={this.popOver.bind(this)} hintText={'Course Code'} />}
           showMenuIconButton={true}
-          iconElementRight={
-          // <TextField onFocus={this.popOver.bind(this)} hintText={'Course Code'} /> 
-          <IconButton onClick={this.handleRequestCloseDrawer.bind(this)} >{icon}</IconButton>
-          }
+          iconElementRight={<IconButton onClick={this.handleRequestCloseDrawer.bind(this)} >{icon}</IconButton>}
           iconElementLeft={<TextField value={this.state.currentSearch} onChange={this.handleSearch.bind(this)} underlineFocusStyle={inputStyle.underlinestyle} floatingLabelStyle={inputStyle.floatinglabel} hintStyle={inputStyle.hintstyle} onFocus={this.popOver.bind(this)} hintText={'Course Code'} />}
           titleStyle={titleStyle}
           zDepth={this.state.appBarDepth}
         />
         <div className={"mainContent"}>
-        <ActualTable drawer={this.state.openDrawer} array={this.state.array} />
-        <StyledDrawer open={this.state.openDrawer}>
+        <ActualTable setdiv={this.setDivHeight.bind(this)} drawer={this.state.openDrawer} array={this.state.array} />
+        <StyledDrawer divHeight={this.state.divHeight} open={this.state.openDrawer}>
           <AddedCourses removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
         </StyledDrawer>
         </div>
