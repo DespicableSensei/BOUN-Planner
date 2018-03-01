@@ -1,22 +1,18 @@
-import { lightBlueA400 } from "material-ui/styles/colors";
 import { blueGrey50 } from "material-ui/styles/colors";
+import { lightBlueA400 } from "material-ui/styles/colors";
 import { MuiThemeProvider } from "material-ui/styles";
 import { Snackbar, AppBar, IconButton, TextField } from "material-ui";
-import ActionList from "material-ui/svg-icons/action/list";
-import HardwareArrowLeft from "material-ui/svg-icons/hardware/keyboard-arrow-left";
-import HardwareArrowRight from "material-ui/svg-icons/hardware/keyboard-arrow-right";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
 import FontIcon from 'material-ui/FontIcon';
+import getMuiTheme from "material-ui/styles/getMuiTheme";
 import React, { Component } from 'react';
 
 import ActualTable from "./ActualTable";
 import AddedCourses from "./AddedCourses";
-import CourseSearch from "./CourseSearch";
+import PopoverSearch from './PopoverSearch'
 import StyledDrawer from "./StyledDrawer";
 
 import '../App.css';
 import all from '../amk.min.json';
-import PopoverSearch from './PopoverSearch'
 
 class App extends Component {
   constructor() {
@@ -250,10 +246,7 @@ class App extends Component {
         borderColor: blueGrey50,
       }
     }
-    let floatingLabel = {color: '#fff'}
-    let hintStyle = {color: '#DDDDDD'}
-    let biggerIcon = {padding: '0px!important'};
-    let icon = (this.state.openDrawer)?<FontIcon className={'material-icons ' + 'biggerIcon'}>keyboard_arrow_right</FontIcon>:<FontIcon className={'material-icons ' + 'biggerIcon'}>keyboard_arrow_left</FontIcon>;
+    let icon = (this.state.openDrawer)?<FontIcon className={'material-icons biggerIcon'}>keyboard_arrow_right</FontIcon>:<FontIcon className={'material-icons biggerIcon'}>keyboard_arrow_left</FontIcon>;
 
     return(
       <MuiThemeProvider muiTheme={muiTheme}>

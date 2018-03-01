@@ -1,6 +1,5 @@
 import React from "react";
-import { Paper, Menu } from "material-ui";
-import CourseCard from '../Components/CourseCard'
+import { Paper } from "material-ui";
 import { MenuItem } from "material-ui/Menu";
 import ContentBackspace from 'material-ui/svg-icons/content/backspace';
 
@@ -36,13 +35,6 @@ class AddedCourses extends React.Component {
         }
     }
     render() {
-        var sty = {};
-        if (this.props.addedCourses.length !== 0) {
-            sty = {overflowY:'auto', overflowX:'hidden'}
-        }
-        else {
-            sty = {marginLeft: "auto",marginRight: "auto"}
-        }
         return (
             <div>
                     <Paper style={this.state.paperStyle} >Conflict Count: {this.props.conflicts.length}</Paper>
