@@ -1,4 +1,5 @@
 import { lightBlueA400 } from "material-ui/styles/colors";
+import { blueGrey50 } from "material-ui/styles/colors";
 import { MuiThemeProvider } from "material-ui/styles";
 import { Snackbar, AppBar, IconButton, TextField } from "material-ui";
 import ActionList from "material-ui/svg-icons/action/list";
@@ -15,6 +16,7 @@ import StyledDrawer from "./StyledDrawer";
 
 import '../App.css';
 import all from '../amk.min.json';
+import PopoverSearch from './PopoverSearch'
 
 class App extends Component {
   constructor() {
@@ -36,6 +38,10 @@ class App extends Component {
       notificationMessage: "",
       openDrawer: true,
       appBarDepth: 2,
+      openPopover: false,
+      anchorEl: '',
+      currentSearch: '',
+      matchedSearch: '',
     };
   }
   addToCourseList(indexArray, courseCode) {
@@ -190,11 +196,19 @@ class App extends Component {
       openDrawer: !this.state.openDrawer,
     });
   };
-  popOver() {
+  popOver(event) {
+    event.preventDefault();
     this.setState({
-
-    })
+      openPopover: true,
+      anchorEl: event.currentTarget,
+    });
   }
+  handlePopoverClose() {
+    this.setState({
+      openPopover: false,
+    });
+  }
+
   // render() {
   //   return (
   //     <MuiThemeProvider>
@@ -212,19 +226,46 @@ class App extends Component {
   //     </MuiThemeProvider>
   //   );
   // }
-  
+  handleSearch(e) {
+    var change = e.target.value.toUpperCase();
+        let deps = all;
+        var matchedDeps = [];
+        deps.forEach((dep) => {
+            if (dep["Code_Sec"].startsWith(change) && change !== '') {
+                matchedDeps.push(dep);
+            }
+        });
+        this.setState({
+            currentSearch: change,
+            matchedSearch: matchedDeps
+        });
+  }
   render() {
     let titleStyle = {
       textAlign: "center",
-      textShadow: "1px 1px rgba(100, 100, 100, 0.26)",
+      textShadow: "2px 2px rgba(100, 100, 100, 0.4)",
       fontSize: 32,
       marginLeft: -240,
     };
     const muiTheme = getMuiTheme({
       palette: {
         primary1Color: lightBlueA400,
+        primary2Color: blueGrey50,
       }
     });
+    let inputStyle = {
+      floatinglabel: {
+        color: blueGrey50,
+      },
+      hintstyle: {
+        color: blueGrey50,
+      },
+      underlinestyle: {
+        borderColor: blueGrey50,
+      }
+    }
+    let floatingLabel = {color: '#fff'}
+    let hintStyle = {color: '#DDDDDD'}
     let biggerIcon = {padding: '0px!important'};
     let icon = (this.state.openDrawer)?<FontIcon className={'material-icons ' + 'biggerIcon'}>keyboard_arrow_right</FontIcon>:<FontIcon className={'material-icons ' + 'biggerIcon'}>keyboard_arrow_left</FontIcon>;
 
@@ -242,7 +283,7 @@ class App extends Component {
           // <TextField onFocus={this.popOver.bind(this)} hintText={'Course Code'} /> 
           <IconButton onClick={this.handleRequestCloseDrawer.bind(this)} >{icon}</IconButton>
           }
-          iconElementLeft={<TextField onFocus={this.popOver.bind(this)} hintText={'Course Code'} />}
+          iconElementLeft={<TextField value={this.state.currentSearch} onChange={this.handleSearch.bind(this)} underlineFocusStyle={inputStyle.underlinestyle} floatingLabelStyle={inputStyle.floatinglabel} hintStyle={inputStyle.hintstyle} onFocus={this.popOver.bind(this)} hintText={'Course Code'} />}
           titleStyle={titleStyle}
           zDepth={this.state.appBarDepth}
         />
@@ -252,6 +293,17 @@ class App extends Component {
           <AddedCourses removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
         </StyledDrawer>
         </div>
+        <PopoverSearch 
+        open={this.state.openPopover} 
+        handleRequestClose={this.handlePopoverClose.bind(this)} 
+        anchorEl={this.state.anchorEl}
+        getIndex={this.getIndex.bind(this)}
+        courseIndexes={this.state.myCoursesIndexes}
+        checkForConflicts={this.checkForConflicts.bind(this)}
+        addCourse={this.addCourse.bind(this)}
+        all={all}
+        matchedSearch={this.state.matchedSearch}
+        />
         <Snackbar 
           open={this.state.openNotification} 
           message={this.state.notificationMessage} 

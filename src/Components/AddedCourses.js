@@ -1,6 +1,8 @@
 import React from "react";
-import { Paper } from "material-ui";
+import { Paper, Menu } from "material-ui";
 import CourseCard from '../Components/CourseCard'
+import { MenuItem } from "material-ui/Menu";
+import ContentBackspace from 'material-ui/svg-icons/content/backspace';
 
 class AddedCourses extends React.Component {
     constructor() {
@@ -21,18 +23,9 @@ class AddedCourses extends React.Component {
         
         if(myCourses.length !== 0) {
             var displayArray = myCourses.map((course) => {
-                return(
-                    <CourseCard titleMan={course} removeCourse={this.removeCourse.bind(this, {course})} />
+                return (
+                    <MenuItem primaryText={course} rightIcon={<ContentBackspace/>} onClick={this.removeCourse.bind(this, {course})} />
                 );
-                // return(
-                //     <Paper style={this.state.paperStyle} >{course}<button onClick={this.removeCourse.bind(this, {course})}>Remove</button></Paper>
-                // );
-                // return (
-                //     <tr key={Math.random()}>
-                //     <td>{course}</td>
-                //     <td><button onClick={this.removeCourse.bind(this, {course})}>Remove</button></td>
-                //     </tr>
-                // );
             })
             return displayArray;
         }
@@ -40,11 +33,6 @@ class AddedCourses extends React.Component {
             return(
                 <Paper style={this.state.paperStyle} >You haven't added any courses yet.</Paper>
             );
-            // return (
-            //     <tr>
-            //     <td>You haven't added any courses yet.</td>
-            //     </tr>
-            // );
         }
     }
     render() {
@@ -58,7 +46,6 @@ class AddedCourses extends React.Component {
         return (
             <div>
                     <Paper style={this.state.paperStyle} >Conflict Count: {this.props.conflicts.length}</Paper>
-                    {/* <CourseCard /> */}
                     {this.listCourses()}
             </div>
         );
