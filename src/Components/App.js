@@ -249,6 +249,7 @@ class App extends Component {
 
     return(
       <MuiThemeProvider muiTheme={muiTheme}>
+      <div id={'whatAreYouLookingFor'}>
         <AppBar
           id={'appbar'}
           title={"BOUN Course Planner +"}
@@ -281,6 +282,7 @@ class App extends Component {
           autoHideDuration={4000} 
           onRequestClose={this.handleRequestClose} 
         />
+      </div>
       </MuiThemeProvider>
     );
   }
