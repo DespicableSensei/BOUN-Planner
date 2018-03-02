@@ -35,7 +35,6 @@ class App extends Component {
       openDrawer: true,
       appBarDepth: 2,
       openPopover: false,
-      anchorEl: '',
       currentSearch: '',
       matchedSearch: '',
       divHeight: '',
@@ -255,7 +254,7 @@ class App extends Component {
           title={"BOUN Course Planner +"}
           showMenuIconButton={true}
           iconElementRight={<IconButton onClick={this.handleRequestCloseDrawer.bind(this)} >{icon}</IconButton>}
-          iconElementLeft={<TextField value={this.state.currentSearch} onChange={this.handleSearch.bind(this)} underlineFocusStyle={inputStyle.underlinestyle} floatingLabelStyle={inputStyle.floatinglabel} hintStyle={inputStyle.hintstyle} onFocus={this.popOver.bind(this)} hintText={'Course Code'} />}
+          iconElementLeft={<TextField inputStyle={inputStyle.hintstyle} value={this.state.currentSearch} onChange={this.handleSearch.bind(this)} underlineFocusStyle={inputStyle.underlinestyle} floatingLabelStyle={inputStyle.floatinglabel} hintStyle={inputStyle.hintstyle} onFocus={this.popOver.bind(this)} hintText={'Course Code'} />}
           titleStyle={titleStyle}
           zDepth={this.state.appBarDepth}
         />

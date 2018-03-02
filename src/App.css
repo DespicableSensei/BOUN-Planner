@@ -119,3 +119,7 @@ table {
 #appbar button {
   padding: 0!important;
 }
+
+::-webkit-scrollbar {
+  width: 0px;
+}
