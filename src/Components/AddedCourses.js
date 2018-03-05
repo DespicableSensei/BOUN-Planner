@@ -23,7 +23,7 @@ class AddedCourses extends React.Component {
         if(myCourses.length !== 0) {
             var displayArray = myCourses.map((course) => {
                 return (
-                    <MenuItem primaryText={course} rightIcon={<ContentBackspace/>} onClick={this.removeCourse.bind(this, {course})} />
+                    <MenuItem key={course} primaryText={course} rightIcon={<ContentBackspace/>} onClick={this.removeCourse.bind(this, {course})} />
                 );
             })
             return displayArray;
