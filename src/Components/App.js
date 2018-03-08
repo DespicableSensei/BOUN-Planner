@@ -47,6 +47,7 @@ class App extends Component {
     
     if (currentCourses.indexOf(courseCode) < 0) {
       currentCourses.push(courseCode);
+      this.handleNotification(2,0, courseCode);
       this.addToCells(indexArray,courseCode);
     }
     else {
@@ -84,6 +85,15 @@ class App extends Component {
       case 1:
         message = "This course has already been added: " + courseCode;
       break
+      case 2:
+        message = courseCode + " has been added.";
+      break
+      case 3:
+        message = courseCode + " has been removed.";
+      break
+      case 4:
+        message = "~2018 | Emre Öztürk | @kuzubaba";
+      break
     }
     this.setState({
       notificationMessage: message,
@@ -103,6 +113,7 @@ class App extends Component {
     else {
       var removalIndex = currentCourses.indexOf(courseCode)
       currentCourses.splice(removalIndex, 1);
+      this.handleNotification(3,0,courseCode);
       this.removeFromCells(indexArray,courseCode);
     }
 
@@ -152,6 +163,7 @@ class App extends Component {
   }
   addCourse(days, times, courseCode) {
     var convertedArray = this.getIndex(days, times, courseCode);
+    this.handlePopoverClose();
     this.addToCourseList(convertedArray,courseCode);    
   }
   removeCourse(courseName) {
@@ -221,6 +233,9 @@ class App extends Component {
       divHeight: height,
     })
   }
+  handleTitleClick() {
+    this.handleNotification(4,0,0);
+  }
   render() {
     let titleStyle = {
       textAlign: "center",
@@ -253,6 +268,7 @@ class App extends Component {
         <AppBar
           id={'appbar'}
           title={"BOUN Course Planner +"}
+          onTitleClick={this.handleTitleClick.bind(this)}
           showMenuIconButton={true}
           iconElementRight={<IconButton onClick={this.handleRequestCloseDrawer.bind(this)} >{icon}</IconButton>}
           iconElementLeft={<TextField inputStyle={inputStyle.hintstyle} value={this.state.currentSearch} onChange={this.handleSearch.bind(this)} underlineFocusStyle={inputStyle.underlinestyle} floatingLabelStyle={inputStyle.floatinglabel} hintStyle={inputStyle.hintstyle} onFocus={this.popOver.bind(this)} hintText={'Course Code'} />}

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Table, TableBody, TableRow, TableRowColumn, TableHeader } from 'material-ui/Table';
-import FlatButton from 'material-ui/FlatButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 import {TableHeaderColumn} from 'material-ui'
+import AddIcon from 'material-ui/svg-icons/navigation/check'
 
 class ResultCourse extends React.Component {
     addCourse(days, hours, courseCode) {
@@ -24,16 +25,16 @@ class ResultCourse extends React.Component {
     listResults() {
         let matchedDeps = this.props.results;
         if(matchedDeps.length !== 0) {
-            var displayArray = matchedDeps.slice(0,9).map((course) => {
+            var displayArray = matchedDeps.slice(0,9).map((course,index) => {
                 return (
-                    <TableRow displayRowCheckbox={false}>
+                    <TableRow key={index}>
                     <TableRowColumn colSpan={2} >{course["Code_Sec"]}</TableRowColumn>
                     <TableRowColumn colSpan={3} >{course["Name"]}</TableRowColumn>
                     <TableRowColumn colSpan={1} style={{textAlign: 'center', margin: '0 auto'}} ><center>{course["Credits"]}/{course["Ects"]}</center></TableRowColumn>
                     <TableRowColumn colSpan={2} >{course["Instr."]}</TableRowColumn>
                     <TableRowColumn colSpan={2} >{course["Timestring"]}</TableRowColumn>
-                    <TableRowColumn colSpan={1} >#{this.doesThisConflict(course["Days"],course["Hours"])}</TableRowColumn>
-                    <TableRowColumn colSpan={2} ><center><FlatButton onClick={this.addCourse.bind(this,course["Days"],course["Hours"],course["Code_Sec"])}>Add</FlatButton></center></TableRowColumn>
+                    <TableRowColumn colSpan={1} style={{textAlign: 'center'}} >#{this.doesThisConflict(course["Days"],course["Hours"])}</TableRowColumn>
+                    <TableRowColumn colSpan={2} ><center><FloatingActionButton mini={true} onClick={this.addCourse.bind(this,course["Days"],course["Hours"],course["Code_Sec"])} ><AddIcon/></FloatingActionButton></center></TableRowColumn>
                     </TableRow>
                 );
             })
@@ -41,31 +42,26 @@ class ResultCourse extends React.Component {
         }
         else {
             return (
-                <TableRow displayRowCheckbox={false} >
+                <TableRow>
                 <TableRowColumn>Start by typing in your course code.</TableRowColumn>
                 </TableRow>
             );
         }
     }
     render() {
-        var sty = {};
-        if (this.props.results.length !== 0) {
-            sty = {height: 'auto', overflowY:'scroll', overflowX:'hidden'}
-        }
-        else {
-            sty = {height: 'auto'}
-        }
         return (
-            <div className='courseScroll' style={sty}>
+            <div className='courseScroll' >
                 <Table>
-                    <TableHeader displaySelectAll={false} >
-                        <TableHeaderColumn colSpan={2} >Course Code</TableHeaderColumn>
-                        <TableHeaderColumn colSpan={3} >Course Name</TableHeaderColumn>
-                        <TableHeaderColumn colSpan={1} style={{textAlign: 'center'}} >Credits/ECTS</TableHeaderColumn>
-                        <TableHeaderColumn colSpan={2} >Instructor</TableHeaderColumn>
-                        <TableHeaderColumn colSpan={2} >Times</TableHeaderColumn>
-                        <TableHeaderColumn colSpan={1} >Conflicts</TableHeaderColumn>
-                        <TableHeaderColumn colSpan={2} style={{textAlign: 'center'}} >Add</TableHeaderColumn>
+                    <TableHeader adjustForCheckbox={false} displaySelectAll={false} >
+                        <TableRow>
+                            <TableHeaderColumn colSpan={2} >Course Code</TableHeaderColumn>
+                            <TableHeaderColumn colSpan={3} >Course Name</TableHeaderColumn>
+                            <TableHeaderColumn colSpan={1} style={{textAlign: 'center'}} >Credits/ECTS</TableHeaderColumn>
+                            <TableHeaderColumn colSpan={2} >Instructor</TableHeaderColumn>
+                            <TableHeaderColumn colSpan={2} >Times</TableHeaderColumn>
+                            <TableHeaderColumn colSpan={1} style={{textAlign: 'center'}}  >Conflicts</TableHeaderColumn>
+                            <TableHeaderColumn colSpan={2} style={{textAlign: 'center'}} >Add</TableHeaderColumn>
+                        </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false} >
                         {this.listResults()}
