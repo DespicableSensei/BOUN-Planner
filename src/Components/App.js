@@ -278,7 +278,7 @@ class App extends Component {
         <div className={"mainContent"}>
         <ActualTable setdiv={this.setDivHeight.bind(this)} drawer={this.state.openDrawer} array={this.state.array} />
         <StyledDrawer divHeight={this.state.divHeight} open={this.state.openDrawer}>
-          <AddedCourses removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
+          <AddedCourses all={all} removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
         </StyledDrawer>
         </div>
         <PopoverSearch 
