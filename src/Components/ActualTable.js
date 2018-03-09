@@ -1,4 +1,11 @@
 import React from 'react';
+import randomColor from 'randomcolor';
+
+Math.seed = function(s) {
+        //string to number
+        var seed = s.split('').map(i => i.charCodeAt()).join('');
+        return seed
+};
 
 class ActualTable extends React.Component {
     giveCol(dayIndex) {
@@ -40,7 +47,22 @@ class ActualTable extends React.Component {
     }
     makeCell(cellArray,timeIndex) {
         var insideCellArray = cellArray.map((item) => {
-            return <li key={Math.random()}>{item}</li>
+            var pad = (item!=='')?5:0;
+            return <li 
+            style={{
+                background: randomColor({
+                    seed: Math.seed(item),
+                    luminosity: 'light',
+                    hue: 'random'
+                }),
+                paddingTop: pad,
+                paddingBottom: pad,
+                margin: -2
+            }} 
+            key={Math.random()}
+            >
+            {item}
+            </li>
         })
         return <td key={Math.random()}>{insideCellArray}</td>
     }

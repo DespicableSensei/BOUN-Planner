@@ -2,6 +2,13 @@ import React from "react";
 import { Paper } from "material-ui";
 import { MenuItem } from "material-ui/Menu";
 import ContentBackspace from 'material-ui/svg-icons/content/backspace';
+import randomColor from 'randomcolor';
+
+Math.seed = function(s) {
+    //string to number
+    var seed = s.split('').map(i => i.charCodeAt()).join('');
+    return seed
+};
 
 class AddedCourses extends React.Component {
     constructor() {
@@ -23,7 +30,7 @@ class AddedCourses extends React.Component {
         if(myCourses.length !== 0) {
             var displayArray = myCourses.map((course) => {
                 return (
-                    <MenuItem key={course} primaryText={course} rightIcon={<ContentBackspace/>} onClick={this.removeCourse.bind(this, {course})} />
+                    <MenuItem style={{color: randomColor({seed: Math.seed(course)})}} key={course} primaryText={course} rightIcon={<ContentBackspace/>} onClick={this.removeCourse.bind(this, {course})} />
                 );
             })
             return displayArray;
