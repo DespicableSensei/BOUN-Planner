@@ -1,7 +1,9 @@
 import { blueGrey50 } from "material-ui/styles/colors";
+import { instanceOf } from 'prop-types';
 import { lightBlueA400 } from "material-ui/styles/colors";
 import { MuiThemeProvider } from "material-ui/styles";
 import { Snackbar, AppBar, IconButton, TextField } from "material-ui";
+import { withCookies, Cookies } from 'react-cookie';
 import FontIcon from 'material-ui/FontIcon';
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import React, { Component } from 'react';
@@ -15,6 +17,9 @@ import '../App.css';
 import all from '../amk.min.json';
 
 class App extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
   constructor() {
     super();
 
@@ -40,7 +45,21 @@ class App extends Component {
       divHeight: '',
     };
   }
+
+  componentWillMount() {
+    const { cookies } = this.props;
+    var cookieStringToBool = (cookies.get('openDrawer') === 'true');
+    this.setState({
+      array: cookies.get('array') || [],
+      myCourses: cookies.get('myCourses') || [],
+      myCoursesIndexes: cookies.get('myCoursesIndexes') || [],
+      conflicts: cookies.get('conflicts') || [],
+      openDrawer: cookieStringToBool
+    });
+  }
+
   addToCourseList(indexArray, courseCode) {
+    const { cookies } = this.props;
     var currentCourses = JSON.parse(JSON.stringify(this.state.myCourses));
     var currentCoursesIndexes = JSON.parse(JSON.stringify(this.state.myCoursesIndexes));
     var currentConflicts = this.checkForConflicts();
@@ -71,8 +90,12 @@ class App extends Component {
       myCoursesIndexes:currentCoursesIndexes,
       conflicts:currentConflicts,
     })
+    cookies.set('myCourses', JSON.stringify(currentCourses), { path: '/' });
+    cookies.set('myCoursesIndexes', JSON.stringify(currentCoursesIndexes), { path: '/' });
+    cookies.set('conflicts', JSON.stringify(currentConflicts), { path: '/' });
   }
   handleNotification(type, index, courseCode) {
+    const { cookies } = this.props;
     var cur = JSON.parse(JSON.stringify(this.state.array));
     var message = '';
     switch(type) {
@@ -98,9 +121,12 @@ class App extends Component {
     this.setState({
       notificationMessage: message,
       openNotification: true,
-    });
+    })
+    cookies.set('notificationMessage', message, { path: '/' });
+    cookies.set('openNotification', true, { path: '/' });
   }
   removeFromCourseList(indexArray, courseCode) {
+    const { cookies } = this.props;
     var currentCourses = JSON.parse(JSON.stringify(this.state.myCourses));
     var currentCoursesIndexes = JSON.parse(JSON.stringify(this.state.myCoursesIndexes));
     var currentConflicts = this.checkForConflicts();
@@ -133,16 +159,22 @@ class App extends Component {
       myCoursesIndexes:currentCoursesIndexes,
       conflicts:currentConflicts,
     })
+    cookies.set('myCourses', JSON.stringify(currentCourses), { path: '/' });
+    cookies.set('myCoursesIndexes', JSON.stringify(currentCoursesIndexes), { path: '/' });
+    cookies.set('conflicts', JSON.stringify(currentConflicts), { path: '/' });
   }
   addToCells(indexArray, courseCode) {
+    const { cookies } = this.props;
     var cur = JSON.parse(JSON.stringify(this.state.array));
     indexArray.forEach((index) => {
       //Push Course Code
       cur[index].push(courseCode);
     });
     this.setState({array:cur});
+    cookies.set('array', JSON.stringify(cur), { path: '/' });
   }
   removeFromCells(indexArray, courseCode) {
+    const { cookies } = this.props;
     var cur = JSON.parse(JSON.stringify(this.state.array));
 
     indexArray.forEach((index) => {
@@ -151,6 +183,8 @@ class App extends Component {
     });
 
     this.setState({array:cur});
+    cookies.set('array', JSON.stringify(cur), { path: '/' });
+
   }
   getIndex(days, times, courseCode) {
     var timesOfChange = convertTime(days, times);
@@ -193,14 +227,20 @@ class App extends Component {
     return conflictArray;
   }
   handleRequestClose = () => {
+    const { cookies } = this.props;
     this.setState({
       openNotification: false,
     });
+    cookies.set('openNotification', false, { path: '/' });
   };
   handleRequestCloseDrawer = () => {
+    const { cookies } = this.props;
     this.setState({
       openDrawer: !this.state.openDrawer,
     });
+    var drawerStatusToSet = !this.state.openDrawer;
+    console.log(drawerStatusToSet);
+    cookies.set('openDrawer', drawerStatusToSet, { path: '/' });
   };
   popOver(event) {
     event.preventDefault();
@@ -261,7 +301,6 @@ class App extends Component {
       }
     }
     let icon = (this.state.openDrawer)?<FontIcon className={'material-icons biggerIcon'}>keyboard_arrow_right</FontIcon>:<FontIcon className={'material-icons biggerIcon'}>keyboard_arrow_left</FontIcon>;
-
     return(
       <MuiThemeProvider muiTheme={muiTheme}>
       <div id={'whatAreYouLookingFor'}>
@@ -410,4 +449,4 @@ function convertTime(days, times) {
   })
   return finalArray;
 }
-export default App;
+export default withCookies(App);

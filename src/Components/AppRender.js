@@ -1,5 +1,6 @@
 import React from 'react';
 import App from '../Components/App'
+import { CookiesProvider } from 'react-cookie';
 
 class AppRender extends React.Component {
     resize = () => this.forceUpdate();
@@ -11,7 +12,11 @@ class AppRender extends React.Component {
         window.addEventListener('resize', this.resize)
     }
     render() {
-        return <App/>
+        return (
+        <CookiesProvider>
+            <App/>
+        </CookiesProvider>
+        )
     }
 }
 
