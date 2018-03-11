@@ -14,7 +14,7 @@ import PopoverSearch from './PopoverSearch'
 import StyledDrawer from "./StyledDrawer";
 
 import '../App.css';
-import all from '../amk.min.json';
+import all from '../addedToAmk.json';
 
 class App extends Component {
   static propTypes = {
