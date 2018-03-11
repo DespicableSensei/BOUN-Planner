@@ -48,9 +48,11 @@ class App extends Component {
 
   componentWillMount() {
     const { cookies } = this.props;
-    var cookieStringToBool = (cookies.get('openDrawer') === 'true');
+    let cookieStringToBool;
+    if (cookies.get('openDrawer') === undefined) {cookieStringToBool = true}
+    else {cookieStringToBool = (cookies.get('openDrawer') === 'true')}
     this.setState({
-      array: cookies.get('array') || [],
+      array: cookies.get('array') || this.state.array,
       myCourses: cookies.get('myCourses') || [],
       myCoursesIndexes: cookies.get('myCoursesIndexes') || [],
       conflicts: cookies.get('conflicts') || [],
@@ -90,9 +92,9 @@ class App extends Component {
       myCoursesIndexes:currentCoursesIndexes,
       conflicts:currentConflicts,
     })
-    cookies.set('myCourses', JSON.stringify(currentCourses), { path: '/' });
-    cookies.set('myCoursesIndexes', JSON.stringify(currentCoursesIndexes), { path: '/' });
-    cookies.set('conflicts', JSON.stringify(currentConflicts), { path: '/' });
+    cookies.set('myCourses', JSON.stringify(currentCourses));
+    cookies.set('myCoursesIndexes', JSON.stringify(currentCoursesIndexes));
+    cookies.set('conflicts', JSON.stringify(currentConflicts));
   }
   handleNotification(type, index, courseCode) {
     const { cookies } = this.props;
@@ -122,8 +124,8 @@ class App extends Component {
       notificationMessage: message,
       openNotification: true,
     })
-    cookies.set('notificationMessage', message, { path: '/' });
-    cookies.set('openNotification', true, { path: '/' });
+    cookies.set('notificationMessage', message);
+    cookies.set('openNotification', true);
   }
   removeFromCourseList(indexArray, courseCode) {
     const { cookies } = this.props;
@@ -159,9 +161,9 @@ class App extends Component {
       myCoursesIndexes:currentCoursesIndexes,
       conflicts:currentConflicts,
     })
-    cookies.set('myCourses', JSON.stringify(currentCourses), { path: '/' });
-    cookies.set('myCoursesIndexes', JSON.stringify(currentCoursesIndexes), { path: '/' });
-    cookies.set('conflicts', JSON.stringify(currentConflicts), { path: '/' });
+    cookies.set('myCourses', JSON.stringify(currentCourses));
+    cookies.set('myCoursesIndexes', JSON.stringify(currentCoursesIndexes));
+    cookies.set('conflicts', JSON.stringify(currentConflicts));
   }
   addToCells(indexArray, courseCode) {
     const { cookies } = this.props;
@@ -171,7 +173,7 @@ class App extends Component {
       cur[index].push(courseCode);
     });
     this.setState({array:cur});
-    cookies.set('array', JSON.stringify(cur), { path: '/' });
+    cookies.set('array', JSON.stringify(cur));
   }
   removeFromCells(indexArray, courseCode) {
     const { cookies } = this.props;
@@ -183,7 +185,7 @@ class App extends Component {
     });
 
     this.setState({array:cur});
-    cookies.set('array', JSON.stringify(cur), { path: '/' });
+    cookies.set('array', JSON.stringify(cur));
 
   }
   getIndex(days, times, courseCode) {
@@ -231,7 +233,7 @@ class App extends Component {
     this.setState({
       openNotification: false,
     });
-    cookies.set('openNotification', false, { path: '/' });
+    cookies.set('openNotification', false);
   };
   handleRequestCloseDrawer = () => {
     const { cookies } = this.props;
@@ -240,7 +242,7 @@ class App extends Component {
     });
     var drawerStatusToSet = !this.state.openDrawer;
     console.log(drawerStatusToSet);
-    cookies.set('openDrawer', drawerStatusToSet, { path: '/' });
+    cookies.set('openDrawer', drawerStatusToSet);
   };
   popOver(event) {
     event.preventDefault();
