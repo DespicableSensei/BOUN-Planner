@@ -40,12 +40,19 @@ class ActualTable extends React.Component {
         //makeRowArray: [rowReturn, timeIndex]
         var rowArray = makeRowArray[0];
         var timeIndex = makeRowArray[1];
-        var cellArray = rowArray.map((cell) => {
-            return this.makeCell(cell,timeIndex);
+        var cellArray = rowArray.map((cell,index) => {
+            var cellIndex = (timeIndex*6+index);
+            if(this.props.secondCells.some((i) => i === cellIndex)) {
+                return 
+            }
+            else {
+                return this.makeCell(cell,cellIndex);
+            }
         })
         return <tr key={Math.random()}><td className={'timeIndex'}>{this.giveActualTime(timeIndex)}</td>{cellArray}</tr>;
     }
-    makeCell(cellArray,timeIndex) {
+    makeCell(cellArray, cellIndex) {
+        var rowSpan = (this.props.secondCells.some((i) => i === cellIndex+6))?2:1;
         var insideCellArray = cellArray.map((item) => {
             var pad = (item!=='')?5:0;
             return <li 
@@ -64,7 +71,8 @@ class ActualTable extends React.Component {
             {item}
             </li>
         })
-        return <td key={Math.random()}>{insideCellArray}</td>
+
+        return <td rowSpan={rowSpan} key={Math.random()}>{insideCellArray}</td>
     }
     makeAllRows() {
         var rowArray = [];

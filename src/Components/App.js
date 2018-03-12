@@ -29,6 +29,7 @@ class App extends Component {
     var myCourses = [];
     var myCoursesIndexes = [];
     var conflicts = [];
+    var secondCells = [];
 
     this.state = {
       array:array,
@@ -43,6 +44,7 @@ class App extends Component {
       currentSearch: '',
       matchedSearch: '',
       divHeight: '',
+      secondCells: secondCells,
     };
   }
 
@@ -169,7 +171,12 @@ class App extends Component {
     const { cookies } = this.props;
     var cur = JSON.parse(JSON.stringify(this.state.array));
     indexArray.forEach((index) => {
-      if (indexArray.some((i) => i === index + 6)) {console.log("DUDE BLOK DERS BETWEEN: " + index + "-" + (index+6))}
+      if (indexArray.some((i) => i === index + 6)) {
+        console.log("DUDE BLOK DERS BETWEEN: " + index + "-" + (index+6));
+        var currentSecondCells = this.state.secondCells;
+        currentSecondCells.push(index + 6);
+        this.setState({secondCells:currentSecondCells})
+      }
       //Push Course Code
       cur[index].push(courseCode);
     });
@@ -181,6 +188,12 @@ class App extends Component {
     var cur = JSON.parse(JSON.stringify(this.state.array));
 
     indexArray.forEach((index) => {
+      if (this.state.secondCells.some((i) => i === index)) {
+        var currentSecondCells = this.state.secondCells;
+        var removeIndex = currentSecondCells.indexOf(index);
+        currentSecondCells.splice(removeIndex,1);
+        this.setState({secondCells:currentSecondCells})
+      }
       var toRemove = cur[index].indexOf(courseCode);
       cur[index].splice(toRemove,1);
     });
@@ -318,7 +331,7 @@ class App extends Component {
           zDepth={this.state.appBarDepth}
         />
         <div className={"mainContent"}>
-        <ActualTable setdiv={this.setDivHeight.bind(this)} drawer={this.state.openDrawer} array={this.state.array} />
+        <ActualTable secondCells={this.state.secondCells} setdiv={this.setDivHeight.bind(this)} drawer={this.state.openDrawer} array={this.state.array} />
         <StyledDrawer divHeight={this.state.divHeight} open={this.state.openDrawer}>
           <AddedCourses all={all} removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
         </StyledDrawer>
