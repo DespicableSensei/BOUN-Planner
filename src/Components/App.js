@@ -169,6 +169,7 @@ class App extends Component {
     const { cookies } = this.props;
     var cur = JSON.parse(JSON.stringify(this.state.array));
     indexArray.forEach((index) => {
+      if (indexArray.some((i) => i === index + 6)) {console.log("DUDE BLOK DERS BETWEEN: " + index + "-" + (index+6))}
       //Push Course Code
       cur[index].push(courseCode);
     });
