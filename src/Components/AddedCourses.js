@@ -16,10 +16,10 @@ class AddedCourses extends React.Component {
         let paperStyle = {
             padding: '8px 16px',
             marginBottom: 8,
+            marginTop: 8,
         }
         this.state = {
             paperStyle: paperStyle,
-            creditCount: 0
         }
     }
     removeCourse(days, hours, courseCode) {
@@ -42,23 +42,10 @@ class AddedCourses extends React.Component {
             );
         }
     }
-    countCredits() {
-        let myCourses = this.props.addedCourses;
-        let myCourseIndexes = myCourses.map(course => this.props.all.findIndex(val => val["Code_Sec"] === course));
-        let myCredits = myCourseIndexes.map(index => {
-            var credit = this.props.all[index]["Credits"];
-            var creditInt = parseInt(credit,10);
-            return creditInt;
-        });
-        let totalCredits = myCredits.reduce((a,c) => a+c,0);
-        return totalCredits
-    }
     render() {
         return (
             <div>
-                    <Paper style={this.state.paperStyle} >Conflicts: {this.props.conflicts.length}</Paper>
-                    <Paper style={this.state.paperStyle} >Credits: {this.countCredits()}</Paper>
-                    {this.listCourses()}
+                {this.listCourses()}
             </div>
         );
     }

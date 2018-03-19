@@ -2,7 +2,7 @@ import { blueGrey50 } from "material-ui/styles/colors";
 import { instanceOf } from 'prop-types';
 import { lightBlueA400 } from "material-ui/styles/colors";
 import { MuiThemeProvider } from "material-ui/styles";
-import { Snackbar, AppBar, IconButton, TextField } from "material-ui";
+import { Snackbar, AppBar, IconButton, TextField, Tabs , Tab} from "material-ui";
 import { withCookies, Cookies } from 'react-cookie';
 import FontIcon from 'material-ui/FontIcon';
 import getMuiTheme from "material-ui/styles/getMuiTheme";
@@ -12,6 +12,7 @@ import ActualTable from "./ActualTable";
 import AddedCourses from "./AddedCourses";
 import PopoverSearch from './PopoverSearch'
 import StyledDrawer from "./StyledDrawer";
+import Counters from './Counters';
 
 import '../App.css';
 import all from '../addedToAmk.json';
@@ -320,7 +321,19 @@ class App extends Component {
         <div className={"mainContent"}>
         <ActualTable setdiv={this.setDivHeight.bind(this)} drawer={this.state.openDrawer} array={this.state.array} />
         <StyledDrawer divHeight={this.state.divHeight} open={this.state.openDrawer}>
-          <AddedCourses all={all} removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
+          <Counters conflicts={this.checkForConflicts()} addedCourses={this.state.myCourses} all={all} />
+          <Tabs style={{marginLeft: -16, marginRight: -16}} >
+            <Tab label={'Added Courses'}>
+              <div style={{marginLeft: 16, marginRight: 16, marginTop:20}} >
+                <AddedCourses all={all} removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
+              </div>
+            </Tab>
+            <Tab label={'Browse'}>
+              <div style={{marginLeft: 16, marginRight: 16, marginTop:20}} >
+              ehehehehe
+              </div>
+            </Tab>
+          </Tabs>
         </StyledDrawer>
         </div>
         <PopoverSearch 
