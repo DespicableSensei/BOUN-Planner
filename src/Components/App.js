@@ -59,7 +59,6 @@ class App extends Component {
       openDrawer: cookieStringToBool
     });
   }
-
   addToCourseList(indexArray, courseCode) {
     const { cookies } = this.props;
     var currentCourses = JSON.parse(JSON.stringify(this.state.myCourses));
@@ -237,12 +236,12 @@ class App extends Component {
     cookies.set('openNotification', false);
   };
   handleRequestCloseDrawer = () => {
+    //setTimeout(this.handleNotification.bind(this),320);
     const { cookies } = this.props;
     this.setState({
       openDrawer: !this.state.openDrawer,
     });
     var drawerStatusToSet = !this.state.openDrawer;
-    console.log(drawerStatusToSet);
     cookies.set('openDrawer', drawerStatusToSet);
   };
   popOver(event) {
@@ -318,10 +317,7 @@ class App extends Component {
           zDepth={this.state.appBarDepth}
         />
         <div className={"mainContent"}>
-        <div className={"deneme"} >
-          dude
-        </div>
-        <ActualTable setdiv={this.setDivHeight.bind(this)} drawer={this.state.openDrawer} array={this.state.array} />
+        <ActualTable courseIndexes={this.state.myCoursesIndexes} setdiv={this.setDivHeight.bind(this)} drawer={this.state.openDrawer} array={this.state.array} />
         <StyledDrawer divHeight={this.state.divHeight} open={this.state.openDrawer}>
           <AddedCourses all={all} removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
         </StyledDrawer>

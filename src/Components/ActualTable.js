@@ -40,12 +40,13 @@ class ActualTable extends React.Component {
         //makeRowArray: [rowReturn, timeIndex]
         var rowArray = makeRowArray[0];
         var timeIndex = makeRowArray[1];
-        var cellArray = rowArray.map((cell) => {
-            return this.makeCell(cell,timeIndex);
+        var cellArray = rowArray.map((cell,index) => {
+            var cellId = 'cell'+(parseInt(timeIndex,10) * 6 + parseInt(index,10));
+            return this.makeCell(cell,timeIndex,cellId);
         })
-        return <tr id={timeIndex} key={Math.random()}><td className={'timeIndex'}>{this.giveActualTime(timeIndex)}</td>{cellArray}</tr>;
+        return <tr id={'row'+timeIndex} key={'row'+timeIndex}><td className={'timeIndex'}>{this.giveActualTime(timeIndex)}</td>{cellArray}</tr>;
     }
-    makeCell(cellArray,timeIndex) {
+    makeCell(cellArray,timeIndex,cellId) {
         var insideCellArray = cellArray.map((item) => {
             var pad = (item!=='')?5:0;
             return <li 
@@ -64,7 +65,7 @@ class ActualTable extends React.Component {
             {item}
             </li>
         })
-        return <td key={Math.random()}>{insideCellArray}</td>
+        return <td id={cellId} key={cellId}>{insideCellArray}</td>
     }
     makeAllRows() {
         var rowArray = [];
@@ -84,10 +85,61 @@ class ActualTable extends React.Component {
         const height = this.divElement.clientHeight;
         this.props.setdiv(height);
     }
+    placeYourself(blockLength,colorSeed,cellNumber) {
+        var dayIndex = 0;
+        var tableWidth = (this.props.drawer)?Math.ceil(document.defaultView.innerWidth * 0.8 - 32):Math.ceil(document.defaultView.innerWidth - 32);
+        let posObject = {display:'none'}
+        let el = document.querySelector('#cell'+cellNumber);
+        let placement = el && el.getBoundingClientRect();
+        var background = randomColor({
+            seed: Math.seed(colorSeed),
+            luminosity: 'light',
+            hue: 'random'
+        })
+        let style = el && el.style;
+        let parent = el && el.parentElement;
+        switch(cellNumber) {
+            default:
+            case 0:case 6:case 12:case 18:case 24:case 30:case 36:case 42:case 48:case 54:case 60:case 66:case 72:case 78:
+                dayIndex = 0;
+            break
+            case 1:case 7:case 13:case 19:case 25:case 31:case 37:case 43:case 49:case 55:case 61:case 67:case 73:case 79:
+                dayIndex = 1;
+            break
+            case 2:case 8:case 14:case 20:case 26:case 32:case 38:case 44:case 50:case 56:case 62:case 68:case 74:case 80:
+                dayIndex = 2;
+            break
+            case 3:case 9:case 15:case 21:case 27:case 33:case 39:case 45:case 51:case 57:case 63:case 69:case 75:case 81:
+                dayIndex = 3;
+            break
+            case 4:case 10:case 16:case 22:case 28:case 34:case 40:case 46:case 52:case 58:case 64:case 70:case 76:case 82:
+                dayIndex = 4;
+            break
+            case 5:case 11:case 17:case 23:case 29:case 35:case 41:case 47:case 53:case 59:case 65:case 71:case 77:case 83:
+                dayIndex = 5;
+            break
+        }
+        if (placement!==null) {
+            console.log(placement.top);
+            posObject = {borderLeft: '4px solid rgba(0,0,0,0.4)',borderRadius:5,position:'absolute',backgroundColor: background,top:placement.top,left:tableWidth/7*(dayIndex+1)+16,width:tableWidth/7-4,height:placement.height*blockLength}
+        }
+        return (
+          <div className={'transition'} style={posObject}>
+            
+          </div>
+        )
+    }
+    makeAllLabels() {
+        this.props.courseIndexes.map((courseIndex, index) => {
+            console.log(courseIndex);
+        })
+    }
     render() {
         var tableDivClass = (this.props.drawer)?'tableDivOpenDrawer':'tableDiv';
+        var tableWidth = (this.props.drawer)?document.defaultView.innerWidth * 0.8 - 32:document.defaultView.innerWidth - 32;
         return(
-            <div ref={ (divElement) => this.divElement = divElement} className={tableDivClass}>
+            <div ref={ (divElement) => this.divElement = divElement} style={{width: tableWidth }} className={tableDivClass}>
+            {this.makeAllLabels()}
             <table id="coursesTable">
                 <thead>
                     <tr>
