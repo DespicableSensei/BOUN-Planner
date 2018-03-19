@@ -43,7 +43,7 @@ class ActualTable extends React.Component {
         var cellArray = rowArray.map((cell) => {
             return this.makeCell(cell,timeIndex);
         })
-        return <tr key={Math.random()}><td className={'timeIndex'}>{this.giveActualTime(timeIndex)}</td>{cellArray}</tr>;
+        return <tr id={timeIndex} key={Math.random()}><td className={'timeIndex'}>{this.giveActualTime(timeIndex)}</td>{cellArray}</tr>;
     }
     makeCell(cellArray,timeIndex) {
         var insideCellArray = cellArray.map((item) => {

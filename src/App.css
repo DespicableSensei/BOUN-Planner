@@ -127,3 +127,8 @@ table {
 ::-webkit-scrollbar {
   width: 0px;
 }
+
+.deneme {
+  position: absolute;
+  top: 110px;
+}
