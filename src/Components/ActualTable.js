@@ -3,6 +3,7 @@ import randomColor from 'randomcolor';
 
 Math.seed = function(s) {
         //string to number
+        console.log(s);
         var seed = s.split('').map(i => i.charCodeAt()).join('');
         return seed
 };
@@ -96,7 +97,6 @@ class ActualTable extends React.Component {
             luminosity: 'light',
             hue: 'random'
         })
-        let style = el && el.style;
         let parent = el && el.parentElement;
         switch(cellNumber) {
             default:
@@ -130,9 +130,11 @@ class ActualTable extends React.Component {
         )
     }
     makeAllLabels() {
-        this.props.courseIndexes.map((courseIndex, index) => {
-            console.log(courseIndex);
+        var yeh = JSON.parse(JSON.stringify(this.props.courseIndexes))
+        var myNew = yeh.map((courseIndex, index) => {
+            this.placeYourself(1,courseIndex,courseIndex)
         })
+        return myNew
     }
     render() {
         var tableDivClass = (this.props.drawer)?'tableDivOpenDrawer':'tableDiv';
