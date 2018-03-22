@@ -29,7 +29,7 @@ class App extends Component {
     var myCourses = [];
     var myCoursesIndexes = [];
     var conflicts = [];
-
+    var newData = [];
     this.state = {
       array:array,
       myCourses:myCourses,
@@ -43,6 +43,7 @@ class App extends Component {
       currentSearch: '',
       matchedSearch: '',
       divHeight: '',
+      newData: newData,
     };
   }
 
@@ -59,7 +60,7 @@ class App extends Component {
       openDrawer: cookieStringToBool
     });
   }
-  addToCourseList(indexArray, courseCode) {
+  addToCourseListOld(indexArray, courseCode) {
     const { cookies } = this.props;
     var currentCourses = JSON.parse(JSON.stringify(this.state.myCourses));
     var currentCoursesIndexes = JSON.parse(JSON.stringify(this.state.myCoursesIndexes));
@@ -75,7 +76,6 @@ class App extends Component {
       this.handleNotification(1, 0, courseCode);
       return
     }
-
     indexArray.forEach((index) => {
       if (currentCoursesIndexes.indexOf(index) < 0) {
         currentCoursesIndexes.push(index);
@@ -85,7 +85,6 @@ class App extends Component {
         console.log("There is a conflict at this index: " + index);
       }
     })
-
     this.setState({
       myCourses:currentCourses,
       myCoursesIndexes:currentCoursesIndexes,
@@ -95,6 +94,28 @@ class App extends Component {
     cookies.set('myCoursesIndexes', JSON.stringify(currentCoursesIndexes));
     cookies.set('conflicts', JSON.stringify(currentConflicts));
   }
+  addToCourseList(courseObject) {
+    const { cookies } = this.props;
+    var currentNewDataStruc = JSON.parse(JSON.stringify(this.state.newData));
+    var thisCourseInNewData = currentNewDataStruc.find((obj) => {return obj["Code_Sec"] === courseObject["Code_Sec"]});
+
+    if(thisCourseInNewData !== undefined) {
+      console.log("This course has already been added: " + courseObject["Code_Sec"]);
+      this.handleNotification(1, 0, courseObject["Code_Sec"]);
+      return
+    }
+    else {
+      //var objToAdd = {courseObject: courseObject, indexes: newIndexData}
+      currentNewDataStruc.push(courseObject);
+      this.handleNotification(2, 0, courseObject["Code_Sec"]);
+    }
+
+    this.setState({
+      newData: currentNewDataStruc,
+    })
+    cookies.set('newData', JSON.stringify(currentNewDataStruc));
+  }
+
   handleNotification(type, index, courseCode) {
     const { cookies } = this.props;
     var cur = JSON.parse(JSON.stringify(this.state.array));
@@ -167,11 +188,18 @@ class App extends Component {
   addToCells(indexArray, courseCode) {
     const { cookies } = this.props;
     var cur = JSON.parse(JSON.stringify(this.state.array));
+    var myArray = [];
     indexArray.forEach((index) => {
-      if (indexArray.some((i) => i === index + 6)) {console.log("DUDE BLOK DERS BETWEEN: " + index + "-" + (index+6))}
+      if (indexArray.some((i) => i === index + 6)) {
+        console.log("DUDE BLOK DERS BETWEEN: " + index + "-" + (index+6));
+        if(myArray.indexOf(index)>-1) {myArray.splice(myArray.indexOf(index),1)}
+        myArray.push(index);
+        myArray.push(index+6);
+      }
       //Push Course Code
       cur[index].push(courseCode);
     });
+    console.log(myArray);
     this.setState({array:cur});
     cookies.set('array', JSON.stringify(cur));
   }
@@ -197,12 +225,11 @@ class App extends Component {
     })
     return convertedArray;
   }
-  addCourse(days, times, courseCode) {
-    var convertedArray = this.getIndex(days, times, courseCode);
+  addCourse(course) {
     this.handlePopoverClose();
-    this.addToCourseList(convertedArray,courseCode);    
+    this.addToCourseList(course);
   }
-  removeCourse(courseName) {
+  removeCourseOld(courseName) {
     var courseInfo = {};
     all.forEach((courseInAll) => {
       if (courseInAll["Code_Sec"] === courseName.course) {
@@ -214,6 +241,16 @@ class App extends Component {
     // check if conflict is resolved, if it is remove from there too
     // remove from cells
     this.removeFromCourseList(convertedArray,courseName.course);
+  }
+  removeCourse(courseObject) {
+    const { cookies } = this.props;
+    var currentCourses = this.state.newData;
+    var courseIndex = currentCourses.findIndex((o) => o["Code_Sec"]===courseObject.course["Code_Sec"]);
+    currentCourses.splice(courseIndex,1);
+    this.setState({
+      newData: currentCourses,
+    })
+    cookies.set('newData', JSON.stringify(currentCourses));
   }
   checkForConflicts() {
     var currentArray = JSON.parse(JSON.stringify(this.state.array));
@@ -317,9 +354,9 @@ class App extends Component {
           zDepth={this.state.appBarDepth}
         />
         <div className={"mainContent"}>
-        <ActualTable courseIndexes={this.state.myCoursesIndexes} setdiv={this.setDivHeight.bind(this)} drawer={this.state.openDrawer} array={this.state.array} />
+        <ActualTable courseData={this.state.newData} courseIndexes={this.state.myCoursesIndexes} setdiv={this.setDivHeight.bind(this)} drawer={this.state.openDrawer} array={this.state.array} />
         <StyledDrawer divHeight={this.state.divHeight} open={this.state.openDrawer}>
-          <AddedCourses all={all} removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
+          <AddedCourses courseData={this.state.newData} all={all} removeCourse={this.removeCourse.bind(this)} conflicts={this.checkForConflicts()} array={this.state.array} addedCourses={this.state.myCourses} />
         </StyledDrawer>
         </div>
         <PopoverSearch 
@@ -343,6 +380,34 @@ class App extends Component {
       </MuiThemeProvider>
     );
   }
+}
+
+function blockCheck(indexArray) {
+  let seperatedIndexes = indexArray.sort().map((i) => [i]);
+  let copyToEdit = JSON.parse(JSON.stringify(seperatedIndexes));
+  seperatedIndexes.forEach((inner,index) => {
+      var cur = inner[0];
+      if(index!==0) {
+          var prev = seperatedIndexes[index-1][0];
+          if(prev===cur-6) {
+              var indexToDelete = 0;
+              for(var k = 0; k < copyToEdit.length; k++){
+                  if(copyToEdit[k].some((v) => v==cur)){
+                      indexToDelete = k;
+                  }
+              }
+              var indexToPush = 0;
+              for(var k = 0; k < copyToEdit.length; k++){
+                  if(copyToEdit[k].some((v) => v==prev)){
+                      indexToPush = k;
+                  }
+              }
+              copyToEdit.splice(indexToDelete,1);
+              copyToEdit[indexToPush].push(cur);
+          }
+      }
+  });
+  return copyToEdit;
 }
 //ThThTh
 //101112

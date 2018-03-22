@@ -26,12 +26,13 @@ class AddedCourses extends React.Component {
         this.props.removeCourse(days, hours, courseCode);
     }
     listCourses() {
-        let myCourses = this.props.addedCourses;
+        let myCourses = this.props.courseData;
         
         if(myCourses.length !== 0) {
             var displayArray = myCourses.map((course) => {
+                console.log(course["Code_Sec"]);
                 return (
-                    <MenuItem style={{color: randomColor({seed: Math.seed(course)})}} key={course} primaryText={course} rightIcon={<ContentBackspace/>} onClick={this.removeCourse.bind(this, {course})} />
+                    <MenuItem style={{color: randomColor({seed: Math.seed(course["Code_Sec"])})}} key={course["Code_Sec"]} primaryText={course["Code_Sec"]} rightIcon={<ContentBackspace/>} onClick={this.removeCourse.bind(this, {course})} />
                 );
             })
             return displayArray;
