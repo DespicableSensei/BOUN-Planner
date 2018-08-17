@@ -9,6 +9,10 @@ Math.seed = function(s) {
 };
 
 class ActualTable extends React.Component {
+    constructor() {
+        super();
+        this.placeYourself = this.placeYourself.bind(this)
+    }
     giveCol(dayIndex) {
         var colReturn = [];
         for(var i = dayIndex; i<=dayIndex + 78; i = i + 6) {
@@ -125,16 +129,18 @@ class ActualTable extends React.Component {
         }
         return (
           <div className={'transition'} style={posObject}>
-            
           </div>
         )
     }
     makeAllLabels() {
-        var yeh = JSON.parse(JSON.stringify(this.props.courseIndexes))
-        var myNew = yeh.map((courseIndex, index) => {
-            this.placeYourself(1,courseIndex,courseIndex)
-        })
-        return myNew
+        // var myNew = this.props.courseIndexes.map((courseIndex, index) => {
+        //     this.placeYourself(1,'adasdasd',courseIndex)
+        // })
+        // let muboxi = this.props.courseIndexes.map((index) => {
+        //     this.placeYourself(1,'asdasdasd',index)
+        // })
+        let myBoxes = [this.placeYourself(2,'asasd',12),this.placeYourself(1,'asddffrfasd',45)]
+        return myBoxes
     }
     render() {
         var tableDivClass = (this.props.drawer)?'tableDivOpenDrawer':'tableDiv';
