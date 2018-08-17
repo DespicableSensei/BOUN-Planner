@@ -90,7 +90,7 @@ class ActualTable extends React.Component {
         const height = this.divElement.clientHeight;
         this.props.setdiv(height);
     }
-    placeYourself(blockLength,colorSeed,cellNumber) {
+    placeYourself(blockLength,colorSeed,cellNumber,courseName) {
         var dayIndex = 0;
         var tableWidth = (this.props.drawer)?Math.ceil(document.defaultView.innerWidth * 0.8 - 32):Math.ceil(document.defaultView.innerWidth - 32);
         let posObject = {display:'none'}
@@ -101,7 +101,6 @@ class ActualTable extends React.Component {
             luminosity: 'light',
             hue: 'random'
         })
-        let parent = el && el.parentElement;
         switch(cellNumber) {
             default:
             case 0:case 6:case 12:case 18:case 24:case 30:case 36:case 42:case 48:case 54:case 60:case 66:case 72:case 78:
@@ -129,10 +128,15 @@ class ActualTable extends React.Component {
         }
         return (
           <div className={'transition'} style={posObject}>
+<<<<<<< HEAD
+=======
+            {courseName}
+>>>>>>> d555f5bb15d9a14e86099432602ac7d1459f9886
           </div>
         )
     }
     makeAllLabels() {
+<<<<<<< HEAD
         // var myNew = this.props.courseIndexes.map((courseIndex, index) => {
         //     this.placeYourself(1,'adasdasd',courseIndex)
         // })
@@ -141,6 +145,25 @@ class ActualTable extends React.Component {
         // })
         let myBoxes = [this.placeYourself(2,'asasd',12),this.placeYourself(1,'asddffrfasd',45)]
         return myBoxes
+=======
+        var labels = [];
+        var courses = this.props.courseData;
+        var labelData = courses.map((courseObject) => {
+            console.log(blockCheck(courseObject["convertedTimes"]));
+            console.log(courseObject["convertedTimes"]);
+            var returnObject = {blockedIndex: blockCheck(courseObject["convertedTimes"]),name: courseObject["Code_Sec"]}
+            return returnObject
+        })
+        labelData.forEach((data) => {
+            console.log(data.blockedIndex);
+            data.blockedIndex.forEach((block) => {
+                console.log(block);
+                var toPush = this.placeYourself(block.length,data.name,block[0],data.name);
+                labels.push(toPush);
+            })
+        })
+        return labels
+>>>>>>> d555f5bb15d9a14e86099432602ac7d1459f9886
     }
     render() {
         var tableDivClass = (this.props.drawer)?'tableDivOpenDrawer':'tableDiv';
@@ -167,6 +190,34 @@ class ActualTable extends React.Component {
             </div>
         );
     }
+}
+
+function blockCheck(indexArray) {
+    let seperatedIndexes = indexArray.sort().map((i) => [i]);
+    let copyToEdit = JSON.parse(JSON.stringify(seperatedIndexes));
+    seperatedIndexes.forEach((inner,index) => {
+        var cur = inner[0];
+        if(index!==0) {
+            var prev = seperatedIndexes[index-1][0];
+            if(prev===cur-6) {
+                var indexToDelete = 0;
+                for(var k = 0; k < copyToEdit.length; k++){
+                    if(copyToEdit[k].some((v) => v===cur)){
+                        indexToDelete = k;
+                    }
+                }
+                var indexToPush = 0;
+                for(var k = 0; k < copyToEdit.length; k++){
+                    if(copyToEdit[k].some((v) => v===prev)){
+                        indexToPush = k;
+                    }
+                }
+                copyToEdit.splice(indexToDelete,1);
+                copyToEdit[indexToPush].push(cur);
+            }
+        }
+    });
+    return copyToEdit;
 }
 
 export default ActualTable;

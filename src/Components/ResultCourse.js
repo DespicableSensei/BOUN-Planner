@@ -5,8 +5,8 @@ import {TableHeaderColumn} from 'material-ui'
 import AddIcon from 'material-ui/svg-icons/navigation/check'
 
 class ResultCourse extends React.Component {
-    addCourse(days, hours, courseCode) {
-        this.props.addCourse(days, hours, courseCode);
+    addCourse(course) {
+        this.props.addCourse(course);
     }
     doesThisConflict(days, hours) {
         var arrayOfThisCourse = this.props.getIndex(days, hours);
@@ -34,7 +34,7 @@ class ResultCourse extends React.Component {
                     <TableRowColumn colSpan={2} >{course["Instr."]}</TableRowColumn>
                     <TableRowColumn colSpan={2} >{course["Timestring"]}</TableRowColumn>
                     <TableRowColumn colSpan={1} style={{textAlign: 'center'}} >#{this.doesThisConflict(course["Days"],course["Hours"])}</TableRowColumn>
-                    <TableRowColumn colSpan={2} ><center><FloatingActionButton mini={true} onClick={this.addCourse.bind(this,course["Days"],course["Hours"],course["Code_Sec"])} ><AddIcon/></FloatingActionButton></center></TableRowColumn>
+                    <TableRowColumn colSpan={2} ><center><FloatingActionButton mini={true} onClick={this.addCourse.bind(this,course)} ><AddIcon/></FloatingActionButton></center></TableRowColumn>
                     </TableRow>
                 );
             })
