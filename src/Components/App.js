@@ -15,7 +15,7 @@ import StyledDrawer from "./StyledDrawer";
 import Counters from './Counters';
 
 import '../App.css';
-import all from '../addedToAmk.json';
+import all from '../1819-1c.json';
 
 class App extends Component {
   static propTypes = {
